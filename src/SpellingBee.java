@@ -22,7 +22,7 @@ import java.util.Scanner;
  * It utilizes recursion to generate the strings, mergesort to sort them, and
  * binary search to find them in a dictionary.
  *
- * @author Zach Blick, [ADD YOUR NAME HERE]
+ * @author Zach Blick, Bryan Liu
  *
  * Written on March 5, 2023 for CS2 @ Menlo School
  *
@@ -69,6 +69,33 @@ public class SpellingBee {
     //  If it is not in the dictionary, remove it from words.
     public void checkWords() {
         // YOUR CODE HERE
+        for (int i = 0; i < words.size(); i++)
+        {
+            if (words.get(i).compareTo() == -1)
+        }
+    }
+
+    public boolean findWord(String word, int start, int end)
+    {
+        //base cases
+        if (word.compareTo(DICTIONARY[(start+end)/2) == 0)
+        {
+            return true;
+        }
+        if (word.compareTo(DICTIONARY[(start+end)/2) != 0 && start == end)
+        {
+            return false;
+        }
+
+        //recursive cases
+        if (word.compareTo(DICTIONARY[(start+end)/2]) < 0)
+        {
+            findWord(word,start,(start+end)/2);
+        }
+        if (word.compareTo(DICTIONARY[(start+end)/2]) > 0)
+        {
+            findWord(word,(start+end)/2,end);
+        }
     }
 
     // Prints all valid words to wordList.txt
