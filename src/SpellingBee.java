@@ -45,6 +45,28 @@ public class SpellingBee {
     //  that will find the substrings recursively.
     public void generate() {
         // YOUR CODE HERE — Call your recursive method!
+        words.add(this.letters);
+        generateHelper();
+    }
+
+    public void generateHelper(String word1, String word2)
+    {
+        if (word1.length() == 1)
+        {
+            words.add(word1);
+            return;
+        }
+        if (word2.length() == 1)
+        {
+            words.add(word2);
+            return;
+        }
+
+        for (int i = 0; i < word1.length(); i++)
+        {
+            generateHelper(word1.substring(i,i+1),word1.substring);
+        }
+
     }
 
     // TODO: Apply mergesort to sort all words. Do this by calling ANOTHER method
@@ -71,18 +93,22 @@ public class SpellingBee {
         // YOUR CODE HERE
         for (int i = 0; i < words.size(); i++)
         {
-            if (words.get(i).compareTo() == -1)
+            if (!findWord(words.get(i),0,DICTIONARY_SIZE-1))
+            {
+                words.remove(i);
+                i--;
+            }
         }
     }
 
     public boolean findWord(String word, int start, int end)
     {
         //base cases
-        if (word.compareTo(DICTIONARY[(start+end)/2) == 0)
+        if (word.compareTo(DICTIONARY[(start+end)/2]) == 0)
         {
             return true;
         }
-        if (word.compareTo(DICTIONARY[(start+end)/2) != 0 && start == end)
+        else if (word.compareTo(DICTIONARY[(start+end)/2]) != 0 && start == end)
         {
             return false;
         }
@@ -96,6 +122,7 @@ public class SpellingBee {
         {
             findWord(word,(start+end)/2,end);
         }
+        return true;
     }
 
     // Prints all valid words to wordList.txt
