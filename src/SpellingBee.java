@@ -46,27 +46,26 @@ public class SpellingBee {
     public void generate() {
         // YOUR CODE HERE — Call your recursive method!
         words.add(this.letters);
-        generateHelper();
+        generateHelper(letters);
     }
 
-    public void generateHelper(String word1, String word2)
+    public void generateHelper(String word)
     {
-        if (word1.length() == 1)
+        if (word.length() == 1)
         {
-            words.add(word1);
+            words.add(word);
             return;
         }
-        if (word2.length() == 1)
+        else
         {
-            words.add(word2);
-            return;
+            words.add(word);
         }
 
-        for (int i = 0; i < word1.length(); i++)
+        for (int i = 0; i < word.length(); i++)
         {
-            generateHelper(word1.substring(i,i+1),word1.substring);
+            generateHelper(word.substring(i,i+1));
+            generateHelper(word.substring(0,i)+word.substring(i+1));
         }
-
     }
 
     // TODO: Apply mergesort to sort all words. Do this by calling ANOTHER method
