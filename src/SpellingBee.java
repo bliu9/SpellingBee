@@ -47,6 +47,8 @@ public class SpellingBee {
         // YOUR CODE HERE — Call your recursive method!
         words.add(this.letters);
         generateHelper(letters);
+        System.out.print(words);
+        System.out.print(DICTIONARY[3]);
     }
 
     public void generateHelper(String word)
@@ -107,7 +109,7 @@ public class SpellingBee {
         {
             return true;
         }
-        else if (word.compareTo(DICTIONARY[(start+end)/2]) != 0 && start == end)
+        else if (word.compareTo(DICTIONARY[(start+end)/2]) != 0 || start == end)
         {
             return false;
         }
@@ -115,11 +117,11 @@ public class SpellingBee {
         //recursive cases
         if (word.compareTo(DICTIONARY[(start+end)/2]) < 0)
         {
-            findWord(word,start,(start+end)/2);
+            return findWord(word,start,(start+end)/2);
         }
         if (word.compareTo(DICTIONARY[(start+end)/2]) > 0)
         {
-            findWord(word,(start+end)/2,end);
+            return findWord(word,(start+end)/2,end);
         }
         return true;
     }
