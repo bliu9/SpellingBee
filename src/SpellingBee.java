@@ -1,4 +1,5 @@
 import java.io.*;
+import java.net.IDN;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -22,7 +23,7 @@ import java.util.Scanner;
  * It utilizes recursion to generate the strings, mergesort to sort them, and
  * binary search to find them in a dictionary.
  *
- * @author Zach Blick, Bryan Liu
+ * @author Zach Blick, [ADD YOUR NAME HERE]
  *
  * Written on March 5, 2023 for CS2 @ Menlo School
  *
@@ -45,28 +46,26 @@ public class SpellingBee {
     //  that will find the substrings recursively.
     public void generate() {
         // YOUR CODE HERE — Call your recursive method!
-        words.add(this.letters);
-        generateHelper(letters);
+        generateHelper("",letters);
         System.out.print(words);
-        System.out.print(DICTIONARY[3]);
     }
 
-    public void generateHelper(String word)
+    public void generateHelper(String gen, String word)
     {
-        if (word.length() == 1)
+        if (!gen.equals(""))
         {
-            words.add(word);
-            return;
-        }
-        else
-        {
-            words.add(word);
+            words.add(gen);
         }
 
-        for (int i = 0; i < word.length(); i++)
+        //base case
+        if (word.length() == 0)
         {
-            generateHelper(word.substring(i,i+1));
-            generateHelper(word.substring(0,i)+word.substring(i+1));
+            return;
+        }
+
+        for (int i = 0; i<word.length();i++)
+        {
+            generateHelper(gen+word.charAt(i),word.substring(0,i)+word.substring(i+1));
         }
     }
 
@@ -74,6 +73,78 @@ public class SpellingBee {
     //  that will find the substrings recursively.
     public void sort() {
         // YOUR CODE HERE
+        mergeSort(0,words.size()-1);
+        System.out.println("\n"+words);
+    }
+
+    public void mergeSort(int l, int r) {
+        //base case with 1 element
+        if (l == r)
+        {
+            return;
+        }
+
+        //split area looking at
+        int m = (l+r)/2;
+        mergeSort(l,m);
+        mergeSort(m+1,r);
+
+        //merge the two halves together
+        merge(l,r,m);
+    }
+
+    public void merge(int l, int r, int m)
+    {
+        //merge two halves
+        int leftLen = m-l+1;
+        int rightLen = r-m;
+        ArrayList<String> left = new ArrayList<>();
+        ArrayList<String> right = new ArrayList<>();
+
+        //fill temp arraylists
+        for (int i = 0; i < leftLen; i++)
+        {
+            left.add(words.get(l+i));
+        }
+        for (int i = 0; i <rightLen; i++)
+        {
+            right.add(words.get(m+1+i));
+        }
+
+        int i =0;
+        int j = 0;
+        int a = l;
+        //compare the elements at i and j
+        //the one that comes before the other gets put back into words first
+        while (i < leftLen && j < rightLen) {
+            if (left.get(i).compareTo(right.get(j)) < 0)
+            {
+                words.set(a, left.get(i));
+                i++;
+            }
+            else
+            {
+                words.set(a, right.get(j));
+                j++;
+            }
+            a++;
+        }
+
+        //put remaining stuff from left into words
+        while (i < leftLen)
+        {
+            words.set(a, left.get(i));
+            i++;
+            a++;
+        }
+
+        //put remaining stuff from right into words
+        while (j < rightLen)
+        {
+            words.set(a, right.get(j));
+            j++;
+            a++;
+        }
     }
 
     // Removes duplicates from the sorted list.
@@ -94,35 +165,39 @@ public class SpellingBee {
         // YOUR CODE HERE
         for (int i = 0; i < words.size(); i++)
         {
-            if (!findWord(words.get(i),0,DICTIONARY_SIZE-1))
+            if (!isInDictionary(words.get(i),0,DICTIONARY_SIZE-1))
             {
                 words.remove(i);
                 i--;
             }
         }
+        System.out.println(words);
     }
 
-    public boolean findWord(String word, int start, int end)
+    public boolean isInDictionary(String word, int start, int end)
     {
-        //base cases
-        if (word.compareTo(DICTIONARY[(start+end)/2]) == 0)
+        int mid = (start+end)/2;
+        //base case
+        if (word.equals(DICTIONARY[mid]))
         {
             return true;
         }
-        else if (word.compareTo(DICTIONARY[(start+end)/2]) != 0 || start == end)
+        else if (start >= end)
         {
             return false;
         }
 
-        //recursive cases
-        if (word.compareTo(DICTIONARY[(start+end)/2]) < 0)
+        //recursive
+        //if the word comes before the dictionary word
+        if (word.compareTo(DICTIONARY[mid]) < 0)
         {
-            return findWord(word,start,(start+end)/2);
+            return isInDictionary(word,start,mid-1);
         }
-        if (word.compareTo(DICTIONARY[(start+end)/2]) > 0)
+        if (word.compareTo(DICTIONARY[mid]) > 0)
         {
-            return findWord(word,(start+end)/2,end);
+            return isInDictionary(word,mid+1,end);
         }
+
         return true;
     }
 
